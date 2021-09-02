@@ -61,12 +61,34 @@ before_action :getUser , only: [:updateUser, :deleteUser, :showUser]
             else
               render json: {message: "update failed"}, status: :unprocessable_entity
             end
-         else
+        else
              render json: {message: "user not found"}, status: :unprocessable_entity
-         end
+        end
 
 
-     end
+    end
+
+    #search
+     
+    def searchUser
+        # if params[:input].blank?
+        #     render json: user = User.all , status: :ok
+        # else
+            
+            
+             @parameter = params[:input]
+            #@results= User.where(firstName: /#{@parameter}/i).union.in(lastName: /#{@parameter}/i).to_a
+            @results= User.or({firstName: /#{@parameter}/i}, {lastName: /#{@parameter}/i},{email: /#{@parameter}/i})
+            
+            #  @results=User.where('$text' => {'$search' => 'albert'}).to_a
+            #@results = User.where('text' => "#{@parameter}").to_a 
+            
+            render json: @results, status: :ok
+            
+           
+        
+    end
+
 
  private
   
